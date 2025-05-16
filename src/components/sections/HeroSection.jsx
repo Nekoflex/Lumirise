@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import SectionWrapper from '@/components/SectionWrapper';
 import { motion } from 'framer-motion';
+// MODIFICATION: Importer l'image locale
+import heroBackgroundImage from '@/assets/images/hero-background.jpg';
 
 const HeroSection = () => {
   const scrollToBooking = (e) => {
@@ -10,15 +12,20 @@ const HeroSection = () => {
   };
 
   return (
-    <SectionWrapper id="hero" className="min-h-[80vh] md:min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-lumirise-accent/10 to-lumirise-accent/20 relative overflow-hidden px-4">
+    <SectionWrapper 
+      id="hero" 
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-lumirise-accent/10 to-lumirise-accent/20 relative overflow-hidden px-4"
+    >
       <div className="absolute inset-0 opacity-50">
         <img  
           className="w-full h-full object-cover" 
           alt="Arrière-plan technologique abstrait et épuré"
-          src="https://images.unsplash.com/photo-1583361704493-d4d4d1b1d70a" />
+          // MODIFICATION: Utiliser l'image importée
+          src={heroBackgroundImage} 
+        />
       </div>
       
-      <div className="relative z-10 container mx-auto text-center px-4">
+      <div className="relative z-10 container mx-auto text-center px-4 pt-24 md:pt-0">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

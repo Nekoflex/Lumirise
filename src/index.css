@@ -63,6 +63,13 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-poppins text-lumirise-text;
   }
+
+  /* MODIFICATION (Tâche 1): Ajout d'une marge inférieure par défaut pour les paragraphes */
+  /* Ceci aide à l'harmonisation de l'espacement vertical. */
+  /* Les classes utilitaires spécifiques (ex: mb-0, mb-2) sur des éléments <p> surchargeront cette règle. */
+  p {
+    @apply mb-4;
+  }
 }
 
 html {

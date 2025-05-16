@@ -35,7 +35,15 @@ const PortfolioSection = () => {
     if (scrollContainerRef.current) {
       const cardWidth = scrollContainerRef.current.querySelector('.portfolio-card')?.offsetWidth;
       if (cardWidth) {
-        const scrollAmount = cardWidth + 16;
+        // Calculate scroll amount considering the margin/gap between cards
+        // On mobile, cards have mx-1 (0.25rem margin on each side)
+        // On desktop, space-x-6 (1.5rem gap)
+        const gap = isMobile ? (0.25 * 16 * 2) : (1.5 * 16) ; // Convert rem to px for calculation if needed, or rely on cardWidth including some margin.
+                                                            // Simpler: scroll by cardWidth + gap between cards.
+                                                            // scrollContainerRef.current.children[0] gives the card.
+        const scrollAmount = cardWidth + (isMobile ? parseFloat(getComputedStyle(scrollContainerRef.current.children[0]).marginLeft) + parseFloat(getComputedStyle(scrollContainerRef.current.children[0]).marginRight) : parseFloat(getComputedStyle(scrollContainerRef.current).gap));
+
+
         scrollContainerRef.current.scrollBy({
           left: direction === 'left' ? -scrollAmount : scrollAmount,
           behavior: 'smooth',
@@ -68,13 +76,17 @@ const PortfolioSection = () => {
             style={{ 
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
-              '&::-webkit-scrollbar': { display: 'none' }
+              WebkitOverflowScrolling: 'touch', // Added for smoother scrolling on iOS
             }}
           >
             {portfolioItems.map((item, index) => (
               <motion.div
                 key={index}
-                className="portfolio-card flex-shrink-0 w-[calc(100vw-48px)] sm:w-[280px] md:w-[300px] lg:w-[340px] snap-center mx-1"
+                // MODIFICATION (Tâche 2): Adjusted width for mobile
+                // w-[calc(100vw-48px)] changed to w-full for mobile.
+                // The card will take the full width available within the parent's padding (px-1).
+                // The card's own mx-1 will then create space around it.
+                className="portfolio-card flex-shrink-0 w-full sm:w-[280px] md:w-[300px] lg:w-[340px] snap-center mx-1"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -113,6 +125,7 @@ const PortfolioSection = () => {
               size="icon" 
               onClick={() => scroll('left')} 
               className="bg-white/80 hover:bg-white rounded-full shadow-md z-10 border-lumirise-accent text-lumirise-accent hover:text-white hover:bg-lumirise-accent"
+              aria-label="Projet précédent"
             >
               <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
             </Button>
@@ -121,6 +134,7 @@ const PortfolioSection = () => {
               size="icon" 
               onClick={() => scroll('right')} 
               className="bg-white/80 hover:bg-white rounded-full shadow-md z-10 border-lumirise-accent text-lumirise-accent hover:text-white hover:bg-lumirise-accent"
+              aria-label="Projet suivant"
             >
               <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
             </Button>
