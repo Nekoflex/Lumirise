@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import SectionWrapper from '@/components/SectionWrapper';
@@ -6,44 +6,38 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
+import portfolioSpaBienEtre from '@/assets/images/portfolio/portfolio-spa-bien-etre.jpg';
+import portfolioStudioYoga from '@/assets/images/portfolio/portfolio-studio-yoga.jpg';
+import portfolioAppCoaching from '@/assets/images/portfolio/portfolio-app-coaching.jpg';
+import portfolioDashboardTherapeute from '@/assets/images/portfolio/portfolio-dashboard-therapeute.jpg';
+import portfolioMarketplaceYogaflex from '@/assets/images/portfolio/portfolio-marketplace-yogaflex.jpg';
+import portfolioSystemeRelance from '@/assets/images/portfolio/portfolio-systeme-relance.jpg';
+import portfolioReservationSpa from '@/assets/images/portfolio/portfolio-reservation-spa.jpg';
+
 const portfolioItems = [
-  { title: "Spa Bien-Être Zen", category: "Site Web & Branding", imgSrcPlaceholder: "élégant spa intérieur avec des tons neutres" },
-  { title: "Studio Yoga Harmonie", category: "Application Mobile", imgSrcPlaceholder: "personne faisant du yoga dans un studio lumineux" },
-  { title: "App Coaching Vitalité", category: "Plateforme de Coaching", imgSrcPlaceholder: "interface d'application de coaching sportif" },
-  { title: "Dashboard Planning Thérapeute", category: "Automatisation de gestion client", imgSrcPlaceholder: "tableau de bord de planification pour thérapeute" },
-  { title: "Marketplace YogaFlex", category: "Application mobile multi-prestataires", imgSrcPlaceholder: "interface d'une marketplace d'application mobile pour le yoga" },
-  { title: "Système de relance automatisée", category: "Email + SMS", imgSrcPlaceholder: "visualisation d'un système d'automatisation d'email et SMS" },
-  { title: "Réservation Spa Paris", category: "Site WordPress avec prise de RDV", imgSrcPlaceholder: "page de réservation d'un site web pour spa" },
+  { title: "Spa Bien-Être Zen", category: "Site Web & Branding", imgSrc: portfolioSpaBienEtre },
+  { title: "Studio Yoga Harmonie", category: "Application Mobile", imgSrc: portfolioStudioYoga },
+  { title: "App Coaching Vitalité", category: "Plateforme de Coaching", imgSrc: portfolioAppCoaching },
+  { title: "Dashboard Planning Thérapeute", category: "Automatisation de gestion client", imgSrc: portfolioDashboardTherapeute },
+  { title: "Marketplace YogaFlex", category: "Application mobile multi-prestataires", imgSrc: portfolioMarketplaceYogaflex },
+  { title: "Système de relance automatisée", category: "Email + SMS", imgSrc: portfolioSystemeRelance },
+  { title: "Réservation Spa Paris", category: "Site WordPress avec prise de RDV", imgSrc: portfolioReservationSpa },
 ];
 
 const PortfolioSection = () => {
   const scrollContainerRef = useRef(null);
-  const [loadedImages, setLoadedImages] = useState({});
   const isMobile = useMediaQuery('(max-width: 768px)');
-
-  useEffect(() => {
-    portfolioItems.forEach((item, index) => {
-      const img = new Image();
-      img.src = `https://source.unsplash.com/random/400x225?sig=${index}&${item.imgSrcPlaceholder.split(' ').join('+')}`;
-      img.onload = () => {
-        setLoadedImages(prev => ({ ...prev, [index]: true }));
-      };
-    });
-  }, []);
 
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
-      const cardWidth = scrollContainerRef.current.querySelector('.portfolio-card')?.offsetWidth;
-      if (cardWidth) {
-        // Calculate scroll amount considering the margin/gap between cards
-        // On mobile, cards have mx-1 (0.25rem margin on each side)
-        // On desktop, space-x-6 (1.5rem gap)
-        const gap = isMobile ? (0.25 * 16 * 2) : (1.5 * 16) ; // Convert rem to px for calculation if needed, or rely on cardWidth including some margin.
-                                                            // Simpler: scroll by cardWidth + gap between cards.
-                                                            // scrollContainerRef.current.children[0] gives the card.
-        const scrollAmount = cardWidth + (isMobile ? parseFloat(getComputedStyle(scrollContainerRef.current.children[0]).marginLeft) + parseFloat(getComputedStyle(scrollContainerRef.current.children[0]).marginRight) : parseFloat(getComputedStyle(scrollContainerRef.current).gap));
-
-
+      const cardElement = scrollContainerRef.current.querySelector('.portfolio-card');
+      if (cardElement) {
+        const cardWidth = cardElement.offsetWidth;
+        const cardStyle = getComputedStyle(cardElement);
+        const marginLeft = parseFloat(cardStyle.marginLeft) || 0; // Assurer une valeur numérique
+        const marginRight = parseFloat(cardStyle.marginRight) || 0; // Assurer une valeur numérique
+        const scrollAmount = cardWidth + marginLeft + marginRight;
+        
         scrollContainerRef.current.scrollBy({
           left: direction === 'left' ? -scrollAmount : scrollAmount,
           behavior: 'smooth',
@@ -53,16 +47,24 @@ const PortfolioSection = () => {
   };
 
   const handleWheel = (e) => {
+    // Pour desktop/laptop: prévenir le défilement vertical de la page
+    // et ne PAS convertir le scroll molette vertical en scroll horizontal du carrousel.
     if (!isMobile && scrollContainerRef.current) {
-      e.preventDefault();
-      scrollContainerRef.current.scrollLeft += e.deltaY;
+      e.preventDefault(); 
+      // La ligne scrollContainerRef.current.scrollLeft += e.deltaY; a été supprimée
+      // pour désactiver la navigation par molette dans le carrousel.
     }
   };
 
+  const desktopMaskStyle = !isMobile ? {
+    maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+    WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+  } : {};
+
   return (
     <SectionWrapper id="portfolio" className="w-full overflow-hidden px-4 py-12 md:py-16">
-      <div className="flex justify-between items-center mb-6 md:mb-8">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-poppins font-semibold text-lumirise-text flex-grow text-center md:text-left">
+      <div className="flex justify-center items-center mb-6 md:mb-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-poppins font-semibold text-lumirise-text text-center">
           Ce que nous avons imaginé
         </h2>
       </div>
@@ -72,20 +74,21 @@ const PortfolioSection = () => {
           <div
             ref={scrollContainerRef}
             onWheel={handleWheel}
-            className={`flex overflow-x-auto pb-4 w-full snap-x snap-mandatory ${isMobile ? 'h-[320px] px-1' : 'h-auto space-x-6'}`}
+            className={`flex pb-4 w-full ${
+              isMobile 
+                ? 'overflow-x-auto snap-x snap-mandatory h-[320px] px-1' 
+                : 'overflow-x-hidden h-auto space-x-6' // overflow-x-hidden pour desktop/laptop
+            }`}
             style={{ 
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              WebkitOverflowScrolling: 'touch', // Added for smoother scrolling on iOS
+              scrollbarWidth: 'none', // Cache la scrollbar standard
+              msOverflowStyle: 'none', // Cache la scrollbar pour IE/Edge
+              WebkitOverflowScrolling: isMobile ? 'touch' : 'auto', // Défilement tactile fluide sur mobile
+              ...desktopMaskStyle,
             }}
           >
             {portfolioItems.map((item, index) => (
               <motion.div
                 key={index}
-                // MODIFICATION (Tâche 2): Adjusted width for mobile
-                // w-[calc(100vw-48px)] changed to w-full for mobile.
-                // The card will take the full width available within the parent's padding (px-1).
-                // The card's own mx-1 will then create space around it.
                 className="portfolio-card flex-shrink-0 w-full sm:w-[280px] md:w-[300px] lg:w-[340px] snap-center mx-1"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -94,16 +97,12 @@ const PortfolioSection = () => {
               >
                 <Card className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 border border-gray-200 rounded-lg h-full flex flex-col">
                   <div className="aspect-w-16 aspect-h-9 bg-gray-100 h-[160px] sm:h-[180px] flex-shrink-0">
-                    {loadedImages[index] ? (
-                      <img
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
-                        alt={item.title}
-                        src={`https://source.unsplash.com/random/400x225?sig=${index}&${item.imgSrcPlaceholder.split(' ').join('+')}`}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-200 animate-pulse"></div>
-                    )}
+                    <img
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+                      alt={item.title}
+                      src={item.imgSrc}
+                      loading="lazy"
+                    />
                   </div>
                   <CardContent className="p-3 md:p-4 bg-white flex-grow flex flex-col justify-between">
                     <div>

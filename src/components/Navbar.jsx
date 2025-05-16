@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+// Optionnel: Importer le logo du site si vous décidez de l'utiliser
+// import lumiriseLogo from '@/assets/images/logos/site/lumirise-logo.png';
 
 const navLinks = [
   { href: '#hero', label: 'Accueil' },
@@ -43,17 +45,19 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      // MODIFICATION: Ajustement des classes pour la cohérence du fond en mode mobile ouvert
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isOpen 
-          ? 'bg-white shadow-lg py-4' // Style lorsque le menu mobile est ouvert
+          ? 'bg-white shadow-lg py-4' 
           : isSticky 
-            ? 'bg-white/90 shadow-lg backdrop-blur-md py-4' // Style lorsque sticky et menu mobile fermé
-            : 'bg-transparent py-6' // Style lorsque non-sticky et menu mobile fermé
+            ? 'bg-white/90 shadow-lg backdrop-blur-md py-4' 
+            : 'bg-transparent py-6'
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
         <a href="#hero" onClick={(e) => scrollToSection(e, '#hero')} className="text-2xl font-poppins font-bold text-lumirise-accent">
+          {/* Si vous utilisez un logo image: 
+          <img src={lumiriseLogo} alt="Lumirise Logo" className="h-8 w-auto" /> 
+          Sinon, le texte reste: */}
           Lumirise
         </a>
         <div className="hidden lg:flex items-center space-x-1">

@@ -19,10 +19,12 @@ const HomePage = () => {
       <Navbar />
       <HeroSection />
       <ServicesSection />
+      {/* MODIFICATION: ClientLogosSection déplacée ici */}
+      <ClientLogosSection /> 
       <FreeAuditSection />
       <ApproachSection />
       <PortfolioSection />
-      <ClientLogosSection />
+      {/* ClientLogosSection était initialement ici, maintenant déplacée plus haut */}
       <StatsSection />
       <AboutSection />
       <FaqSection />
