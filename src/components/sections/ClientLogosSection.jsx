@@ -60,7 +60,7 @@ const ClientLogosSection = () => {
             }}
           >
             {duplicatedLogos.map((logo, index) => (
-              <div key={index} className="flex-shrink-0 w-32 h-16 sm:w-36 sm:h-20 md:w-48 md:h-24 mx-3 sm:mx-4 md:mx-6 flex items-center justify-center">
+              <div key={index} className="flex-shrink-0 w-32 h-16 sm:w-36 sm:h-20 md:w-48 md:h-20 mx-3 sm:mx-4 md:mx-6 flex items-center justify-center"> {/* MODIFICATION: md:h-24 to md:h-20 */}
                 <img   
                   className="max-h-full max-w-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
                   alt={logo.alt}

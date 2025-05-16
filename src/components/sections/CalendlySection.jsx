@@ -10,7 +10,10 @@ const CalendlySection = () => {
     head.appendChild(script);
 
     return () => {
-      head.removeChild(script);
+      // Vérifier si le script est toujours un enfant de head avant de le supprimer
+      if (head.contains(script)) {
+        head.removeChild(script);
+      }
     };
   }, []);
 
@@ -22,7 +25,7 @@ const CalendlySection = () => {
       <div 
         className="calendly-inline-widget" 
         data-url="https://calendly.com/lumirise/30min" 
-        style={{ minWidth: '320px', height: '700px' }}
+        style={{ minWidth: '320px', height: '600px' }} /* MODIFICATION: height de 700px à 600px */
       >
       </div>
     </SectionWrapper>
